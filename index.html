@@ -214,7 +214,7 @@
         .replace('$OPENAI_API_KEY', apiKey)
         .replace('$MODEL', model)
         .replace('$INSTRUCTIONS', instructions)
-        .replace('$ROOT', window.location.origin);
+        .replace('$ROOT', window.location.href.trimEnd('/'));
 
       const bookmarkletLink = document.getElementById('bookmarklet');
       bookmarkletLink.href = 'javascript:(' + bookmarkletCode + ')()';
