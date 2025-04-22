@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Rewriter</title>
+    <style>
+      :root {
+        --primary-color: #2563eb;
+        --bg-color: #f8fafc;
+        --border-color: #e2e8f0;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, sans-serif;
+        max-width: 800px;
+        margin: 8px auto;
+        padding: 0 20px;
+        background: var(--bg-color);
+        color: #334155;
+      }
+
+      textarea,
+      input[type="text"] {
+        width: calc(100% - 24px);
+        padding: 8px 12px;
+        border: 1px solid var(--border-color);
+        border-radius: 4px;
+        font-size: 14px;
+      }
+
+      textarea {
+        resize: vertical;
+        min-height: 100px;
+        font-family: inherit;
+        margin: 4px 0 12px;
+      }
+
+      button {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      button:hover {
+        opacity: 0.9;
+      }
+
+      .controls {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+
+      #loading {
+        display: none;
+        width: 24px;
+        height: 24px;
+        margin-left: 8px;
+      }
+
+      #loading.visible {
+        display: inline-block;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="field">
+      <textarea id="input" placeholder="Paste your text here..."></textarea>
+    </div>
+
+    <div class="controls">
+      <button id="rewriteBtn">Rewrite</button>
+      <img src="loading.svg" id="loading" alt="Loading..." />
+      <button id="copyBtn">Copy</button>
+    </div>
+
+    <div class="field">
+      <textarea id="output" placeholder="Revised text will appear here..."></textarea>
+    </div>
+
+    <script>
+      const inputArea = document.getElementById("input");
+      const outputArea = document.getElementById("output");
+      const rewriteBtn = document.getElementById("rewriteBtn");
+      const copyBtn = document.getElementById("copyBtn");
+      const loadingIndicator = document.getElementById("loading");
+      // Settings will be provided by the parent window
+      let settings = {
+        OPENAI_API_BASE: "https://api.openai.com",
+        MODEL: "gpt-4.1-mini",
+        INSTRUCTIONS: "Rewrite the text in a more formal tone.",
+      };
+
+      // Send ready message to parent
+      window.opener.postMessage("🟢 READY", "*");
+
+      // Handle incoming messages from parent
+      window.addEventListener("message", function (event) {
+        // Update settings
+        if (event.data.startsWith("⚙️")) Object.assign(settings, JSON.parse(event.data.replace(/^⚙️/, "")));
+        else if (event.data.startsWith("➡️")) inputArea.value = event.data.replace(/^➡️/, "");
+      });
+
+      // Rewrite button handler
+      rewriteBtn.addEventListener("click", async () => {
+        loadingIndicator.classList.add("visible");
+        rewriteBtn.disabled = true;
+
+        try {
+          const response = await fetch(`${settings.OPENAI_API_BASE}/v1/chat/completions`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${settings.OPENAI_API_KEY}`,
+            },
+            body: JSON.stringify({
+              model: settings.MODEL,
+              messages: [
+                { role: "system", content: settings.INSTRUCTIONS },
+                { role: "user", content: inputArea.value },
+              ],
+            }),
+          });
+
+          const data = await response.json();
+          outputArea.value = data.choices[0].message.content;
+        } catch (error) {
+          alert(error);
+        } finally {
+          loadingIndicator.classList.remove("visible");
+          rewriteBtn.disabled = false;
+        }
+      });
+
+      // Copy button handler
+      copyBtn.addEventListener("click", () => {
+        // Copy but don't close window here. Tell the opener to close it. Maybe because clipboard needs time?
+        if (navigator.clipboard) navigator.clipboard.writeText(outputArea.value);
+        window.opener.postMessage("🔴 CLOSE", "*");
+      });
+    </script>
+  </body>
+</html>

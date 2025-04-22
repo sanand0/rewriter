@@ -1,0 +1,12 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "esbuild bookmarklet.js --minify --outfile=bookmarklet.min.js"
+  },
+  "prettier": {
+    "printWidth": 150
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.2"
+  }
+}
