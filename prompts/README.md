@@ -109,3 +109,11 @@ Add an MIT LICENSE.
 ## Use cases
 
 Clicking on any of these use cases should automatically update the name and instructions with an appropriate prompt (think of good prompts) and smoothly scroll down to bring the Name field into view.
+
+## Refactor
+
+Refactor this code to:
+
+- Reduce custom CSS, replacing it with Bootstrap classes
+- Replace FontAwesome with Bootstrap Icons
+- Modularizing, simplifying, and modernizing the JavaScript code into more readable, elegant and concise code

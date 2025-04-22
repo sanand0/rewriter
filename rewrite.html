@@ -125,9 +125,8 @@
       // Handle incoming messages from parent
       window.addEventListener("message", function (event) {
         // Update settings
-        if (event.data.startsWith("⚙️")) {
-          Object.assign(settings, JSON.parse(event.data.replace(/^⚙️/, "")));
-        } else if (event.data.startsWith("➡️")) {
+        if (event.data.startsWith("⚙️")) Object.assign(settings, JSON.parse(event.data.replace(/^⚙️/, "")));
+        else if (event.data.startsWith("➡️")) {
           inputArea.value = event.data.replace(/^➡️/, "");
           // Auto-trigger rewrite when text is received
           rewriteBtn.click();
@@ -142,10 +141,7 @@
         try {
           const response = await fetch(`${settings.OPENAI_API_BASE}/v1/chat/completions`, {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${settings.OPENAI_API_KEY}`,
-            },
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${settings.OPENAI_API_KEY}` },
             body: JSON.stringify({
               model: settings.MODEL,
               messages: [
