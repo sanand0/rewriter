@@ -32,8 +32,8 @@ Iterated the bugs:
 > When the template changes, the "instructions" textarea should be populated as follows:
 >
 > {
->     "Email polisher": "Refine this email to be concise. Use proper casing. Use words appropriately. Spell in US English. Keep tone informal, professional",
->     "Fix grammar": "Rewrite clearly and concisely. Fix grammar & punctuation. Use Markdown to highlight key points",
+> "Email polisher": "Refine this email to be concise. Use proper casing. Use words appropriately. Spell in US English. Keep tone informal, professional",
+> "Fix grammar": "Rewrite clearly and concisely. Fix grammar & punctuation. Use Markdown to highlight key points",
 > }
 >
 > Also add an "instructions" textarea. By default, it has the "Email polisher" instructions.
@@ -85,3 +85,27 @@ Then, it should write CLEAR instructions asking the user to drag it to their boo
 - Move the OpenAI API Base URL and API key and Model and Test API button into a single section. Use just 2 rows to draw these 4 items.
 - Persist these values in localStorage and restore them on the next load.
 - Create a GitHub action that will run npm run build on commit and then push to GitHub pages
+
+## Refactor Rewriter
+
+Modify rewrite.js so that:
+
+- When it receives a message, it automatically triggers a click on rewriteBtn
+- Shows a small footnote linking to [Rewriter](https://sanand0.github.io/rewrite/)
+
+## README
+
+Create a _professional_ README.md for this application. Use best practices.
+Explain WHY this app is useful, listing a few REAL-LIFE business use cases.
+Include these use cases in #file:index.html as well for users to get ideas. (Use good iconography and typography.)
+In README.md, explain how to use the app.
+Include #file:screenshot.webp as a screenshot.
+Add a section for developers explaining how to set it up. (It's a static HTML app.)
+Mention that the LLM prompts used for this app are under prompts/README.md #file:README.md
+The code is at https://github.com/sanand0/rewriter and output at https://sanand0.github.io/rewriter/
+The author is S Anand <root.node@gmail.com>.
+Add an MIT LICENSE.
+
+## Use cases
+
+Clicking on any of these use cases should automatically update the name and instructions with an appropriate prompt (think of good prompts) and smoothly scroll down to bring the Name field into view.

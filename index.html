@@ -5,7 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Rewrite Bookmarklet Generator</title>
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTUiIGZpbGw9IiMyNTYzZWIiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJtMTYgNyAyIDcgNyAyLTcgMi0yIDctMi03LTctMiA3LTJaIi8+PC9zdmc+" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     body {
       background-color: #f8f9fa;
@@ -52,6 +57,38 @@
       color: #dc3545;
       display: none;
     }
+
+    .use-cases {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .use-case {
+      background: white;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .use-case i {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .use-case h3 {
+      font-size: 1rem;
+      margin: 0.5rem 0;
+      color: #1a1a1a;
+    }
+
+    .use-case p {
+      font-size: 0.9rem;
+      margin: 0;
+      color: #666;
+    }
   </style>
 </head>
 
@@ -59,9 +96,41 @@
   <div class="container">
     <h1 class="mb-4">✨ Rewrite Bookmarklet Generator</h1>
 
-    <div class="alert alert-info">
-      This tool creates a bookmarklet that uses AI to rewrite selected text on any webpage.
-      Once configured, you can select text anywhere and use the bookmarklet to rewrite it using your preferred AI model.
+    <div class="alert alert-info mb-4">
+      Transform your writing instantly with AI-powered text rewriting. Create a custom bookmarklet that helps you refine text anywhere on the web using your preferred AI model.
+    </div>
+
+    <div class="use-cases">
+      <div class="use-case">
+        <i class="fas fa-envelope"></i>
+        <h3>Customer Support</h3>
+        <p>Polish responses before sending to customers, ensuring professional and empathetic communication.</p>
+      </div>
+      <div class="use-case">
+        <i class="fas fa-chart-line"></i>
+        <h3>Sales Teams</h3>
+        <p>Refine cold outreach emails and proposals for better engagement and conversion rates.</p>
+      </div>
+      <div class="use-case">
+        <i class="fas fa-users"></i>
+        <h3>HR Communications</h3>
+        <p>Create clear, professional company-wide announcements and policies.</p>
+      </div>
+      <div class="use-case">
+        <i class="fas fa-book"></i>
+        <h3>Technical Writing</h3>
+        <p>Simplify complex documentation to make it more accessible to broader audiences.</p>
+      </div>
+      <div class="use-case">
+        <i class="fas fa-bullhorn"></i>
+        <h3>Marketing</h3>
+        <p>Adapt content tone across different channels while maintaining brand voice.</p>
+      </div>
+      <div class="use-case">
+        <i class="fas fa-globe"></i>
+        <h3>International Teams</h3>
+        <p>Standardize English writing across team members from different language backgrounds.</p>
+      </div>
     </div>
 
     <form class="needs-validation" novalidate>
@@ -221,6 +290,77 @@
       bookmarkletLink.textContent = '✍️ ' + name;
 
       document.getElementById('bookmarkletContainer').style.display = 'block';
+    });
+
+    const useCasePrompts = {
+      'customer-support': {
+        name: 'Support Response Polisher',
+        instructions: 'Enhance this customer support message. Make it professional yet empathetic. Ensure clear next steps. Use positive language. Keep the tone helpful and solution-focused. Maintain brevity while being thorough.'
+      },
+      'sales-teams': {
+        name: 'Sales Email Enhancer',
+        instructions: 'Transform this sales message to be more compelling. Remove fluff. Emphasize value proposition. Use persuasive but authentic language. Keep it concise and action-oriented. Add a clear call-to-action. Maintain professional warmth.'
+      },
+      'hr-communications': {
+        name: 'HR Announcements Refiner',
+        instructions: 'Polish this HR communication for clarity and professionalism. Use inclusive language. Be direct but empathetic. Ensure policy points are clear. Maintain a balanced tone between formal and approachable. Structure content logically.'
+      },
+      'technical-writing': {
+        name: 'Tech Doc Simplifier',
+        instructions: 'Simplify this technical content while maintaining accuracy. Break down complex concepts. Use clear examples where helpful. Ensure consistent terminology. Make it accessible to non-experts while keeping it technically sound.'
+      },
+      'marketing': {
+        name: 'Marketing Copy Enhancer',
+        instructions: 'Optimize this marketing content for impact. Maintain brand voice while improving engagement. Use powerful action words. Highlight benefits clearly. Create compelling hooks. Keep messaging clear and conversion-focused.'
+      },
+      'international-teams': {
+        name: 'Global English Standardizer',
+        instructions: 'Standardize this text for global audiences. Use clear, standard English. Avoid idioms and regional expressions. Ensure consistent formatting. Make grammar and structure impeccable. Keep tone professional and accessible.'
+      }
+    };
+
+    // Add click handlers to use cases
+    document.querySelectorAll('.use-case').forEach(useCase => {
+      useCase.style.cursor = 'pointer';
+      useCase.addEventListener('click', () => {
+        // Get the use case type from the heading
+        const useCaseType = useCase.querySelector('h3').textContent.toLowerCase().replace(/\s+/g, '-');
+        const prompt = useCasePrompts[useCaseType];
+
+        if (prompt) {
+          // Update form fields
+          document.getElementById('name').value = prompt.name;
+          document.getElementById('instructions').value = prompt.instructions;
+
+          // Smooth scroll to the name field
+          document.getElementById('name').scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
+          });
+
+          // Add a subtle highlight effect to the updated fields
+          ['name', 'instructions'].forEach(id => {
+            const el = document.getElementById(id);
+            el.style.transition = 'background-color 0.3s ease';
+            el.style.backgroundColor = '#fff3cd';
+            setTimeout(() => {
+              el.style.backgroundColor = '';
+            }, 1000);
+          });
+        }
+      });
+
+      // Add hover effect
+      useCase.addEventListener('mouseenter', () => {
+        useCase.style.transform = 'translateY(-2px)';
+        useCase.style.transition = 'transform 0.2s ease';
+        useCase.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+      });
+
+      useCase.addEventListener('mouseleave', () => {
+        useCase.style.transform = '';
+        useCase.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+      });
     });
   </script>
 </body>

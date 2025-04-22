@@ -3,6 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <title>Rewriter</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+PGNpcmNsZSBjeD0iMTYiIGN5PSIxNiIgcj0iMTUiIGZpbGw9IiMyNTYzZWIiLz48cGF0aCBmaWxsPSIjZmZmIiBkPSJtMTYgNyAyIDcgNyAyLTcgMi0yIDctMi03LTctMiA3LTJaIi8+PC9zdmc+"
+    />
     <style>
       :root {
         --primary-color: #2563eb;
@@ -30,7 +35,6 @@
 
       textarea {
         resize: vertical;
-        min-height: 100px;
         font-family: inherit;
         margin: 4px 0 12px;
       }
@@ -67,12 +71,27 @@
       #loading.visible {
         display: inline-block;
       }
+
+      .footnote {
+        position: fixed;
+        bottom: 8px;
+        right: 8px;
+        font-size: 12px;
+        opacity: 0.6;
+      }
+      .footnote a {
+        color: var(--primary-color);
+        text-decoration: none;
+      }
+      .footnote a:hover {
+        text-decoration: underline;
+      }
     </style>
   </head>
 
   <body>
     <div class="field">
-      <textarea id="input" placeholder="Paste your text here..."></textarea>
+      <textarea id="input" rows="8" placeholder="Paste your text here..."></textarea>
     </div>
 
     <div class="controls">
@@ -82,8 +101,10 @@
     </div>
 
     <div class="field">
-      <textarea id="output" placeholder="Revised text will appear here..."></textarea>
+      <textarea id="output" rows="12" placeholder="Revised text will appear here..."></textarea>
     </div>
+
+    <div class="footnote">Powered by <a href="https://sanand0.github.io/rewriter/" target="_blank">Rewriter</a></div>
 
     <script>
       const inputArea = document.getElementById("input");
@@ -104,8 +125,13 @@
       // Handle incoming messages from parent
       window.addEventListener("message", function (event) {
         // Update settings
-        if (event.data.startsWith("⚙️")) Object.assign(settings, JSON.parse(event.data.replace(/^⚙️/, "")));
-        else if (event.data.startsWith("➡️")) inputArea.value = event.data.replace(/^➡️/, "");
+        if (event.data.startsWith("⚙️")) {
+          Object.assign(settings, JSON.parse(event.data.replace(/^⚙️/, "")));
+        } else if (event.data.startsWith("➡️")) {
+          inputArea.value = event.data.replace(/^➡️/, "");
+          // Auto-trigger rewrite when text is received
+          rewriteBtn.click();
+        }
       });
 
       // Rewrite button handler
