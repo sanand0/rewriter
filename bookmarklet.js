@@ -31,11 +31,7 @@ function bookmarklet() {
       // Check if popup exists and is not closed
       if (!popupWindow || popupWindow.closed) {
         pendingText = selectedText;
-        popupWindow = window.open(
-          "$ROOT/rewrite.html",
-          "RewriteWindow",
-          "width=600,height=500,resizable=yes"
-        );
+        popupWindow = window.open("$ROOT/rewrite.html", "RewriteWindow", "width=600,height=500,resizable=yes");
       } else {
         // Popup is already open, send the new text
         popupWindow.postMessage("➡️" + selectedText, "*");

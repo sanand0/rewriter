@@ -64,7 +64,7 @@ It should ask the user for these inputs:
 - Instructions (the system prompt) as a text area. Default: Refine this email to be concise. Use proper casing. Use words appropriately. Spell in US English. Keep tone informal, professional
 - OpenAI API Base. Provide options as a datalist but allow any value. Datalist: https://api.openai.com, https://llmfoundry.straive.com/openai, https://openrouter.ai/api, https://aipipe.org/openrouter, https://aipipe.org/openai
 - OpenAI API Key
-- Model. Provide options as a datalist but allow any value. Datalist: gpt-4.1-nano, gpt-4.1-micro
+- Model. Provide options as a datalist but allow any value. Datalist: gpt-5-nano, gpt-5-mini, gpt-4.1-nano, gpt-4.1-mini
 
 Show a "Test API" button. Clicking on it will send a sample OpenAI request to the OpenAI API Base using the key and model and test it out.
 When testing, show `loading.svg` as the loading indicator.
